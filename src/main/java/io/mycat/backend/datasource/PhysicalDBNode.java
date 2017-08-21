@@ -38,7 +38,7 @@ public class PhysicalDBNode {
 	protected final PhysicalDBPool dbPool;
 
 	public PhysicalDBNode(String hostName, String database,
-			PhysicalDBPool dbPool) {
+						  PhysicalDBPool dbPool) {
 		this.name = hostName;
 		this.database = database;
 		this.dbPool = dbPool;
@@ -58,13 +58,13 @@ public class PhysicalDBNode {
 
 	/**
 	 * get connection from the same datasource
-	 * 
+	 *
 	 * @param exitsCon
 	 * @throws Exception
 	 */
 	public void getConnectionFromSameSource(String schema,boolean autocommit,
-			BackendConnection exitsCon, ResponseHandler handler,
-			Object attachment) throws Exception {
+											BackendConnection exitsCon, ResponseHandler handler,
+											Object attachment) throws Exception {
 
 		PhysicalDatasource ds = this.dbPool.findDatasouce(exitsCon);
 		if (ds == null) {
@@ -88,19 +88,22 @@ public class PhysicalDBNode {
 			dbPool.init(dbPool.activedIndex);
 		}
 	}
-	
+
 	public void getConnection(String schema,boolean autoCommit, RouteResultsetNode rrs,
-							ResponseHandler handler, Object attachment) throws Exception {
+							  ResponseHandler handler, Object attachment) throws Exception {
 		checkRequest(schema);
 		if (dbPool.isInitSuccess()) {
 			LOGGER.debug("rrs.getRunOnSlave() " + rrs.getRunOnSlave());
 			if(rrs.getRunOnSlave() != null){		// 带有 /*db_type=master/slave*/ 注解
 				// 强制走 slave
-				if(rrs.getRunOnSlave()){			
+				if(rrs.getRunOnSlave()){
 					LOGGER.debug("rrs.isHasBlanceFlag() " + rrs.isHasBlanceFlag());
-					if (rrs.isHasBlanceFlag()) {		// 带有 /*balance*/ 注解(目前好像只支持一个注解...)
+
+					/*modified by lixiliang balance注解已无意义，强制走slave，则从非master节点中选择链接即可*/
+					dbPool.getRWBanlanceCon(schema,autoCommit,handler, attachment, this.database);
+					/*if (rrs.isHasBlanceFlag()) {		// 带有 *//*balance*//* 注解(目前好像只支持一个注解...)
 						dbPool.getReadBanlanceCon(schema,autoCommit,handler, attachment, this.database);
-					}else{	// 没有 /*balance*/ 注解
+					}else{	// 没有 *//*balance*//* 注解
 						LOGGER.debug("rrs.isHasBlanceFlag()" + rrs.isHasBlanceFlag());
 						if(!dbPool.getReadCon(schema, autoCommit, handler, attachment, this.database)){
 							LOGGER.warn("Do not have slave connection to use, use master connection instead.");
@@ -112,7 +115,7 @@ public class PhysicalDBNode {
 							rrs.setRunOnSlave(false);
 							rrs.setCanRunInReadDB(false);
 						}
-					}
+					}*/
 				}else{	// 强制走 master
 					// 默认获得的是 writeSource，也就是 走master
 					LOGGER.debug("rrs.getRunOnSlave() " + rrs.getRunOnSlave());
@@ -135,11 +138,11 @@ public class PhysicalDBNode {
 							handler, attachment);
 				}
 			}
-		
+
 		} else {
 			throw new IllegalArgumentException("Invalid DataSource:" + dbPool.getActivedIndex());
-			}
 		}
+	}
 
 //	public void getConnection(String schema,boolean autoCommit, RouteResultsetNode rrs,
 //			ResponseHandler handler, Object attachment) throws Exception {
