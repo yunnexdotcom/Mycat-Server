@@ -263,7 +263,7 @@ public class ShareJoin implements Catlet {
 		for (byte[] field :fields) {	
 			  FieldPacket fieldPacket = new FieldPacket();
 			  fieldPacket.read(field);	
-			  if (ByteUtil.getString(fieldPacket.name).equals(fkey)){
+			  if (ByteUtil.getString(fieldPacket.orgName).equals(fkey)){
 				  joinKeyType = fieldPacket.type;
 				  return i;				  
 			  }
