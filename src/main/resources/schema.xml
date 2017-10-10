@@ -12,7 +12,7 @@
 			  writeType="0" dbType="mysql" dbDriver="native" switchType="-1"  slaveThreshold="100">
 		<heartbeat>select user()</heartbeat>
 		<!-- can have multi write hosts -->
-		<writeHost host="hostM1" url="192.168.10.235:3306" user="root" password="root">
+		<writeHost host="hostM1" url="192.168.10.204:3306" user="root" password="root">
 			<!-- can have multi read hosts -->
 			<!-- -->
 			<readHost host="hostS1" url="192.168.10.239:3306" user="test" password="test" />

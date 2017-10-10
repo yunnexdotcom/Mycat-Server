@@ -195,7 +195,11 @@ public class ShareJoin implements Catlet {
 		String svalue="";
 		for(Map.Entry<String,String> e: ids.entrySet() ){
 			theId=e.getKey();
-			batchRows.put(theId, rows.remove(theId));
+			//add by lixiliang 去除空值
+			byte[] rowbyte = rows.remove(theId);
+			if(rowbyte!=null){
+				batchRows.put(theId, rowbyte);
+			}
 			if (!svalue.equals(e.getValue())){
 				if(joinKeyType == Fields.FIELD_TYPE_VAR_STRING 
 						|| joinKeyType == Fields.FIELD_TYPE_STRING){ // joinkey 为varchar

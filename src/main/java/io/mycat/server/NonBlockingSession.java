@@ -109,7 +109,6 @@ public class NonBlockingSession implements Session {
             StringBuilder s = new StringBuilder();
             LOGGER.debug(s.append(source).append(rrs).toString() + " rrs ");
         }
-
         // 检查路由结果是否为空
         RouteResultsetNode[] nodes = rrs.getNodes();
         if (nodes == null || nodes.length == 0 || nodes[0].getName() == null || nodes[0].getName().equals("")) {
@@ -337,9 +336,11 @@ public class NonBlockingSession implements Session {
 
         BackendConnection c = target.remove(rrn);
         if (c != null) {
-            if (debug) {
+/*            if (debug) {
                 LOGGER.debug("release connection " + c);
-            }
+            }*/
+            //change log level to info
+            LOGGER.info("release connection " + c);
             if (c.getAttachment() != null) {
                 c.setAttachment(null);
             }
