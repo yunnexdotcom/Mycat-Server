@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.mycat</groupId>
 	<artifactId>Mycat-server</artifactId>
-	<version>yunnex-1.6-release</version>
+	<version>yunnex-mycat-1.6-release</version>
 	<packaging>jar</packaging>
 	<name>Mycat-server</name>
 	<description>The project of Mycat-server</description>
@@ -348,7 +348,7 @@
 							<replacements>
 								<replacement>
 									<token>@server-version@</token>
-									<value>5.6.29-mycat-${project.version}-${timestamp}</value>
+									<value>${project.version}-${timestamp}</value>
 								</replacement>
 							</replacements>
 						</configuration>

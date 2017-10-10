@@ -1,6 +1,6 @@
-BuildTime  2017-10-10 03:20:01
+BuildTime  2017-10-10 04:21:18
 GitVersion   null
-MavenVersion yunnex-1.6-release
+MavenVersion yunnex-mycat-1.6-release
 GitUrl https://github.com/MyCATApache/Mycat-Server.git
 MyCatSite http://www.mycat.org.cn
 QQGroup 106088787
