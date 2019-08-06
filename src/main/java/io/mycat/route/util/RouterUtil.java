@@ -937,8 +937,27 @@ public class RouterUtil {
 			throws SQLNonTransientException {
 		
 		List<String> tables = ctx.getTables();
-		
-		if(schema.isNoSharding()||(tables.size() >= 1&&isNoSharding(schema,tables.get(0)))) {
+
+		/**
+		 * update by frank 201/7/25
+		 * 分区表多表查询关联时，多表关联mycat会根据表名的hash值进行排序，判断第一张表是否是分区表，如果是则要求所有的表都必须为分区表，导致查询失效，
+		 *
+		 * 现修改逻辑为，多表关联中，只要有一个表为分区表，绕过分区表判断，直接进行单节点查询。
+		 *
+		 * PS:如进行分表操作，并设定分区表的话，可能会有问题。
+		 *
+		 **/
+		boolean isNoShardingTableFlag = false;
+		// 有多张表join时
+		for (String table : tables) {
+			if (isNoSharding(schema, table)) {
+				isNoShardingTableFlag = true;
+				break;
+			}
+		}
+
+		if(schema.isNoSharding()||(tables.size() >= 1&&isNoSharding(schema,tables.get(0)))
+						||(tables.size() >= 1&&isNoShardingTableFlag)) {
 			return routeToSingleNode(rrs, schema.getDataNode(), ctx.getSql());
 		}
 
